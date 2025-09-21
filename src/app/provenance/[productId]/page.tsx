@@ -23,6 +23,10 @@ export default function ProvenancePage() {
     if (foundFarmer) {
       setFarmer(foundFarmer);
       const foundBatch = foundFarmer.products.find(p => p.id === params.productId);
+      // guard the processingSteps and get the last step safely
+      const processingSteps = foundBatch?.processingSteps ?? [];
+      const lastProcessingStep = processingSteps.length > 0 ? processingSteps[processingSteps.length - 1] : null;
+
       if (foundBatch) {
         setBatch(foundBatch);
         
