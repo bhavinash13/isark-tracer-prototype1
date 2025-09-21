@@ -14,7 +14,7 @@ export default function AuthPage() {
     role: ''
   });
   const [error, setError] = useState('');
-  const router = useRouter();
+  // const router = useRouter();
   const searchParams = useSearchParams();
   const role = searchParams.get('role');
 
