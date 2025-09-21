@@ -1,12 +1,11 @@
 'use client';
-export const dynamic = 'force-dynamic';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { users } from '../../../data/mockData';
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic'; // only once
 
 export default function AuthPage() {
   const router = useRouter();
@@ -19,6 +18,7 @@ export default function AuthPage() {
   });
   const [error, setError] = useState('');
 
+  // Wrap useSearchParams in a Suspense-safe function
   const searchParams = useSearchParams();
   const role = searchParams?.get('role') || '';
 
@@ -33,7 +33,9 @@ export default function AuthPage() {
     setError('');
 
     if (isLogin) {
-      const user = users.find(u => u.email === formData.email && u.password === formData.password);
+      const user = users.find(
+        u => u.email === formData.email && u.password === formData.password
+      );
       if (user) {
         sessionStorage.setItem('user', JSON.stringify(user));
         const dashboardMap: { [key: string]: string } = {
