@@ -5,13 +5,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { users } from '../../../data/mockData';
 
-// Force this page to be client-side only
 export const dynamic = 'force-dynamic';
 
 export default function AuthPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
@@ -21,13 +18,14 @@ export default function AuthPage() {
   });
   const [error, setError] = useState('');
 
-  // Safely read searchParams inside useEffect
+  const searchParams = useSearchParams();
+  const role = searchParams?.get('role') || '';
+
   useEffect(() => {
-    const role = searchParams.get('role');
     if (role) {
       setFormData(prev => ({ ...prev, role }));
     }
-  }, [searchParams]);
+  }, [role]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,7 +82,7 @@ export default function AuthPage() {
             </div>
             <span className="text-xl font-semibold text-gray-900">ISARK Tracer</span>
           </Link>
-          
+
           {currentRole && (
             <div className={`bg-${currentRole.color}-50 border border-${currentRole.color}-200 rounded-lg p-4 mb-6`}>
               <h2 className={`text-lg font-semibold text-${currentRole.color}-900`}>
@@ -105,65 +103,55 @@ export default function AuthPage() {
           <div className="space-y-4">
             {!isLogin && (
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                  Full Name
-                </label>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
                 <input
                   id="name"
                   name="name"
                   type="text"
-                  required={!isLogin}
+                  required
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                   placeholder="Enter your full name"
                 />
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email address</label>
               <input
                 id="email"
                 name="email"
                 type="email"
-                autoComplete="email"
                 required
                 value={formData.email}
                 onChange={handleInputChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                 placeholder="Enter your email"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
               <input
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="current-password"
                 required
                 value={formData.password}
                 onChange={handleInputChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                 placeholder="Enter your password"
               />
             </div>
 
             {!isLogin && (
               <div>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                  Role
-                </label>
+                <label htmlFor="role" className="block text-sm font-medium text-gray-700">Role</label>
                 <select
                   id="role"
                   name="role"
-                  required={!isLogin}
+                  required
                   value={formData.role}
                   onChange={handleInputChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
@@ -204,15 +192,13 @@ export default function AuthPage() {
           </div>
         </form>
 
-        <div className="mt-6">
-          <div className="text-center text-sm text-gray-600">
-            <p className="mb-2">Demo Credentials:</p>
-            <div className="space-y-1 text-xs">
-              <p>Farmer: farmer1@example.com / 1234</p>
-              <p>Lab: lab1@example.com / 1234</p>
-              <p>Processor: proc1@example.com / 1234</p>
-              <p>Regulator: regulator@example.com / 1234</p>
-            </div>
+        <div className="mt-6 text-center text-sm text-gray-600">
+          <p className="mb-2">Demo Credentials:</p>
+          <div className="space-y-1 text-xs">
+            <p>Farmer: farmer1@example.com / 1234</p>
+            <p>Lab: lab1@example.com / 1234</p>
+            <p>Processor: proc1@example.com / 1234</p>
+            <p>Regulator: regulator@example.com / 1234</p>
           </div>
         </div>
       </div>
