@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+latestStep: (foundBatch.processingSteps?.[foundBatch.processingSteps.length - 1] as any)?.name || "N/A"
 'use client';
 
 import { useState, useEffect } from 'react';
