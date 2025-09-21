@@ -7,6 +7,9 @@ import { users } from '../../../data/mockData';
 
 export default function AuthPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [roleParam, setRoleParam] = useState<string | null>(null);
+
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
@@ -15,27 +18,24 @@ export default function AuthPage() {
     role: ''
   });
   const [error, setError] = useState('');
-  // const router = useRouter();
-  const searchParams = useSearchParams();
-  const role = searchParams.get('role');
 
+  // Safely read searchParams on client side
   useEffect(() => {
+    const role = searchParams.get('role');
     if (role) {
+      setRoleParam(role);
       setFormData(prev => ({ ...prev, role }));
     }
-  }, [role]);
+  }, [searchParams]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     if (isLogin) {
-      // Login logic
       const user = users.find(u => u.email === formData.email && u.password === formData.password);
       if (user) {
-        // Store user in sessionStorage
         sessionStorage.setItem('user', JSON.stringify(user));
-        // Navigate to appropriate dashboard
         const dashboardMap: { [key: string]: string } = {
           farmer: '/farmers',
           lab: '/lab-tester',
@@ -47,7 +47,6 @@ export default function AuthPage() {
         setError('Invalid email or password');
       }
     } else {
-      // Signup logic - for demo purposes, just redirect to login
       if (formData.name && formData.email && formData.password && formData.role) {
         alert('Account created successfully! Please login with your credentials.');
         setIsLogin(true);
