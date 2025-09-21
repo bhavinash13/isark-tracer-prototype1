@@ -5,9 +5,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { users } from '../../../data/mockData';
 
-export const dynamic = 'force-dynamic'; // only once
+export const dynamic = 'force-dynamic';
 
-export default function AuthPage() {
+function AuthForm() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -18,7 +18,6 @@ export default function AuthPage() {
   });
   const [error, setError] = useState('');
 
-  // Wrap useSearchParams in a Suspense-safe function
   const searchParams = useSearchParams();
   const role = searchParams?.get('role') || '';
 
@@ -206,5 +205,13 @@ export default function AuthPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AuthPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthForm />
+    </Suspense>
   );
 }
