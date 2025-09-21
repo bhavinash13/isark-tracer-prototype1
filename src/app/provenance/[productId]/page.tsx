@@ -1,4 +1,4 @@
-latestStep: (foundBatch.processingSteps?.[foundBatch.processingSteps.length - 1] as any)?.name || "N/A"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -72,7 +72,7 @@ export default function ProvenancePage() {
             icon: '🏭',
             details: foundBatch.processingSteps && foundBatch.processingSteps.length > 0 ? {
               steps: foundBatch.processingSteps.length,
-              latestStep: foundBatch.processingSteps[foundBatch.processingSteps.length - 1]?.name
+              latestStep: (foundBatch.processingSteps?.[foundBatch.processingSteps.length - 1] as any)?.name || "N/A"
             } : null
           },
           {
