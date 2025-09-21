@@ -5,10 +5,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { users } from '../../../data/mockData';
 
+// Force this page to be client-side only
+export const dynamic = 'force-dynamic';
+
 export default function AuthPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [roleParam, setRoleParam] = useState<string | null>(null);
 
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -19,11 +21,10 @@ export default function AuthPage() {
   });
   const [error, setError] = useState('');
 
-  // Safely read searchParams on client side
+  // Safely read searchParams inside useEffect
   useEffect(() => {
     const role = searchParams.get('role');
     if (role) {
-      setRoleParam(role);
       setFormData(prev => ({ ...prev, role }));
     }
   }, [searchParams]);
